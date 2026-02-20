@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { userService } from '../services/api';
+import { userService, campaignService } from '../services/api';
 import './Landing.css';
+import './Dashboard.css';
 
 function Landing() {
   const [stats, setStats] = useState({ total_startups: 0, total_funded: 0 });
@@ -10,6 +11,13 @@ function Landing() {
   useEffect(() => {
     fetchStats();
   }, []);
+
+  useEffect(() => {
+    fetchFeaturedCampaigns();
+  }, []);
+
+  const [campaigns, setCampaigns] = useState([]);
+  const [campaignsLoading, setCampaignsLoading] = useState(true);
 
   const fetchStats = async () => {
     try {
@@ -28,6 +36,20 @@ function Landing() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchFeaturedCampaigns = async () => {
+    setCampaignsLoading(true);
+    try {
+      const res = await campaignService.getAllCampaigns({ status: 'active' });
+      const data = res.data.results || res.data;
+      setCampaigns((data || []).slice(0, 3));
+    } catch (err) {
+      console.error('Error fetching campaigns for landing:', err);
+      setCampaigns([]);
+    } finally {
+      setCampaignsLoading(false);
     }
   };
 
@@ -101,6 +123,23 @@ function Landing() {
       </section>
 
       {/* CTA Section */}
+      {/* Featured Campaigns Section */}
+      <section className="featured-campaigns">
+        <div className="container">
+          <h2>Featured Campaigns</h2>
+          {campaignsLoading ? (
+            <div className="loading-message">Loading featured campaigns...</div>
+          ) : campaigns && campaigns.length > 0 ? (
+            <div className="campaigns-grid">
+              {campaigns.map(c => (
+                <FeaturedCard key={c.id} campaign={c} />
+              ))}
+            </div>
+          ) : (
+            <div className="no-campaigns">No featured campaigns found</div>
+          )}
+        </div>
+      </section>
       <section className="cta-section">
         <div className="container text-center">
           <h2>Ready to Support Innovation?</h2>
@@ -121,3 +160,43 @@ function Landing() {
 }
 
 export default Landing;
+
+function FeaturedCard({ campaign }) {
+  const progressPercentage = campaign.progress_percentage || 0;
+
+  return (
+    <Link to={`/campaign/${campaign.id}`} className="campaign-card card">
+      <div className="campaign-image">
+        {campaign.image ? (
+          <img src={campaign.image} alt={campaign.product_name} />
+        ) : (
+          <div className="image-placeholder">📦</div>
+        )}
+      </div>
+
+      <div className="card-body campaign-body">
+        <h3 className="campaign-title">{campaign.product_name}</h3>
+        <p className="startup-name">{campaign.startup_name}</p>
+        <p className="campaign-desc">{campaign.description.substring(0, 100)}...</p>
+
+        <div className="campaign-funding">
+          <div className="funding-amount">
+            <span className="current">${campaign.current_amount.toLocaleString()}</span>
+            <span className="goal">of ${campaign.goal_amount.toLocaleString()}</span>
+          </div>
+
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${Math.min(progressPercentage, 100)}%` }}></div>
+          </div>
+
+          <div className="funding-stats">
+            <span>{progressPercentage.toFixed(0)}% funded</span>
+            <span>{campaign.backer_count} backers</span>
+          </div>
+        </div>
+
+        <button className="button-primary campaign-btn">View Campaign</button>
+      </div>
+    </Link>
+  );
+}
