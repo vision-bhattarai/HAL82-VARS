@@ -39,7 +39,7 @@ function Navbar({ isAuthenticated, user, onLogout }) {
                   {user?.startup_profile ? (
                     <>
                       <Link to="/create-campaign" className="dropdown-item">Create Campaign</Link>
-                      <Link to="/dashboard" className="dropdown-item">My Campaigns</Link>
+                      <Link to="/my-dashboard" className="dropdown-item">My Dashboard</Link>
                     </>
                   ) : (
                     <Link to="/become-startup" className="dropdown-item">Become a Startup</Link>

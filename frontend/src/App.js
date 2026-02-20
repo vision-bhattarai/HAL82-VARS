@@ -6,6 +6,7 @@ import StartEaseLanding from './pages/StartEaseLanding';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import MyDashboard from './pages/MyDashboard';
 import CampaignDetail from './pages/CampaignDetail';
 import AddCampaign from './pages/AddCampaign';
 import BecomeStartup from './pages/BecomeStartup';
@@ -33,6 +34,7 @@ function AppContent({ isAuthenticated, user, loading, onLogout, onLoginSuccess }
         <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login onLoginSuccess={onLoginSuccess} />} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register onRegisterSuccess={onLoginSuccess} />} />
         <Route path="/dashboard" element={isAuthenticated ? <Dashboard user={user} /> : <Navigate to="/login" />} />
+        <Route path="/my-dashboard" element={isAuthenticated ? <MyDashboard user={user} /> : <Navigate to="/login" />} />
         <Route path="/campaign/:id" element={<CampaignDetail isAuthenticated={isAuthenticated} />} />
         <Route path="/create-campaign" element={isAuthenticated ? <AddCampaign /> : <Navigate to="/login" />} />
         <Route path="/become-startup" element={isAuthenticated ? <BecomeStartup onSuccess={() => window.location.href = '/dashboard'} /> : <Navigate to="/login" />} />

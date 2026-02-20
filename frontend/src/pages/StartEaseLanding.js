@@ -121,8 +121,8 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
               </button>
               {dropdownOpen && (
                 <div className="startease-user-menu">
-                  <Link to="/dashboard" className="startease-user-menu-item" onClick={() => setDropdownOpen(false)}>
-                    My Campaigns
+                  <Link to="/my-dashboard" className="startease-user-menu-item" onClick={() => setDropdownOpen(false)}>
+                    My Dashboard
                   </Link>
                   <button 
                     onClick={handleLogout} 
