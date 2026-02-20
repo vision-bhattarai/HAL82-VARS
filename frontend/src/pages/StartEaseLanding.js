@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { campaignService } from '../services/api';
 import './StartEaseLanding.css';
 
 function StartEaseLanding({ isAuthenticated, user, onLogout }) {
@@ -14,6 +15,26 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
     navigate('/');
   };
   const statsRef = useRef(null);
+  const [campaigns, setCampaigns] = useState([]);
+  const [campaignsLoading, setCampaignsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      setCampaignsLoading(true);
+      try {
+        const res = await campaignService.getAllCampaigns({ status: 'active' });
+        const data = res.data.results || res.data;
+        setCampaigns((data || []).slice(0, 3));
+      } catch (err) {
+        console.error('Error fetching featured campaigns:', err);
+        setCampaigns([]);
+      } finally {
+        setCampaignsLoading(false);
+      }
+    };
+
+    fetchFeatured();
+  }, []);
 
   useEffect(() => {
     // Intersection Observer for scroll animations
@@ -82,7 +103,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
         </Link>
         <ul className="startease-nav-links">
           <li><a href="/" className="active">Home</a></li>
-          <li><a href="#featured">Startups</a></li>
+          <li><Link to="/dashboard">Campaigns</Link></li>
           <li><Link to="/how-it-works">How it Works</Link></li>
           <li>{isAuthenticated ? <Link to="/settings">Settings</Link> : <a href="/">Settings</a>}</li>
         </ul>
@@ -133,7 +154,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
         </p>
         <div className="startease-hero-cta">
           <Link to="/dashboard" className="startease-btn startease-btn-primary">
-            Explore Startups
+            Explore Campaigns
           </Link>
           <Link to="/how-it-works" className="startease-btn startease-btn-ghost">
             How it Works
@@ -146,7 +167,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
         <div className="startease-stat-item">
           <div className="startease-stat-icon">Milestone</div>
           <div className="startease-stat-num">0</div>
-          <div className="startease-stat-label">Startups Helped</div>
+          <div className="startease-stat-label">Campaigns Helped</div>
         </div>
         <div className="startease-stat-item">
           <div className="startease-stat-icon">$ Capital</div>
@@ -162,90 +183,38 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
 
       {/* FEATURED STARTUPS */}
       <section className="startease-featured startease-section" id="featured">
-        <div className="startease-section-label">Featured Startups</div>
-        <div className="startease-startup-grid">
-          {/* Card 1 */}
-          <div className="startease-startup-card">
-            <span className="startease-card-tag">Energy</span>
-            <div className="startease-card-title">Solar Key</div>
-            <div className="startease-card-desc">
-              Charge your device anywhere you like, powered entirely by renewable solar energy.
-            </div>
-            <div className="startease-progress-wrap">
-              <div className="startease-progress-header">
-                <span className="startease-progress-label">Funding Progress</span>
-                <span className="startease-progress-pct">60%</span>
-              </div>
-              <div className="startease-progress-bar">
-                <div
-                  className="startease-progress-fill"
-                  style={{ width: '60%' }}
-                />
-              </div>
-            </div>
-            <div className="startease-card-footer">
-              <button className="startease-btn-details">Details →</button>
-              <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>
-                $360K of $600K
-              </span>
-            </div>
+        <div className="startease-section-label">Featured Campaigns</div>
+        {campaignsLoading ? (
+          <div className="startease-campaign-grid">Loading...</div>
+        ) : (
+          <div className="startease-campaign-grid">
+            {campaigns.map((c, idx) => (
+              <Link to={`/campaign/${c.id}`} key={c.id} className="startease-campaign-card">
+                <span className="startease-card-tag">{c.product_type}</span>
+                <div className="startease-card-title">{c.product_name}</div>
+                <div className="startease-card-desc">{c.description.substring(0, 120)}</div>
+                <div className="startease-progress-wrap">
+                  <div className="startease-progress-header">
+                    <span className="startease-progress-label">Funding Progress</span>
+                    <span className="startease-progress-pct">{c.progress_percentage?.toFixed(0) || 0}%</span>
+                  </div>
+                  <div className="startease-progress-bar">
+                    <div
+                      className="startease-progress-fill"
+                      style={{ width: `${Math.min(c.progress_percentage || 0, 100)}%` }}
+                    />
+                  </div>
+                </div>
+                <div className="startease-card-footer">
+                  <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>
+                    ${Number(c.current_amount).toLocaleString()} of ${Number(c.goal_amount).toLocaleString()}
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
+        )}
 
-          {/* Card 2 */}
-          <div className="startease-startup-card">
-            <span className="startease-card-tag">Consumer</span>
-            <div className="startease-card-title">Safal's Lamp</div>
-            <div className="startease-card-desc">
-              Charge your device anywhere you like with elegant design meets sustainable function.
-            </div>
-            <div className="startease-progress-wrap">
-              <div className="startease-progress-header">
-                <span className="startease-progress-label">Funding Progress</span>
-                <span className="startease-progress-pct">30%</span>
-              </div>
-              <div className="startease-progress-bar">
-                <div
-                  className="startease-progress-fill"
-                  style={{ width: '30%' }}
-                />
-              </div>
-            </div>
-            <div className="startease-card-footer">
-              <button className="startease-btn-details">Details →</button>
-              <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>
-                $90K of $300K
-              </span>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="startease-startup-card">
-            <span className="startease-card-tag">Media</span>
-            <div className="startease-card-title">PageTurn</div>
-            <div className="startease-card-desc">
-              A digital comic book marketplace connecting independent creators with global readers.
-            </div>
-            <div className="startease-progress-wrap">
-              <div className="startease-progress-header">
-                <span className="startease-progress-label">Funding Progress</span>
-                <span className="startease-progress-pct">78%</span>
-              </div>
-              <div className="startease-progress-bar">
-                <div
-                  className="startease-progress-fill"
-                  style={{ width: '78%' }}
-                />
-              </div>
-            </div>
-            <div className="startease-card-footer">
-              <button className="startease-btn-details">Details →</button>
-              <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>
-                $390K of $500K
-              </span>
-            </div>
-          </div>
-        </div>
-        
         {/* Explore Button */}
         <div className="startease-explore-cta">
           <Link to="/dashboard" className="startease-btn startease-btn-primary startease-btn-explore">

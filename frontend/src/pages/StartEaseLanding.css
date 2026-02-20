@@ -406,18 +406,18 @@ body {
   background: var(--accent);
 }
 
-/* FEATURED STARTUPS */
+/* FEATURED CAMPAIGNS */
 .startease-featured { 
   background: var(--card-bg); 
 }
 
-.startease-startup-grid {
+.startease-campaign-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
 }
 
-.startease-startup-card {
+.startease-campaign-card {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -428,13 +428,13 @@ body {
   opacity: 0;
   animation: startease-fadeUp 0.7s ease forwards;
 }
-.startease-startup-card:nth-child(1) { 
+.startease-campaign-card:nth-child(1) { 
   animation-delay: 0.1s; 
 }
-.startease-startup-card:nth-child(2) { 
+.startease-campaign-card:nth-child(2) { 
   animation-delay: 0.25s; 
 }
-.startease-startup-card:hover {
+.startease-campaign-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 16px 48px rgba(26,22,18,0.12);
 }
