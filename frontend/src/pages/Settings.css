@@ -371,6 +371,25 @@
   transition: all 0.3s ease;
 }
 
+.info-card-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #fd7e14 0%, #e8590c 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.info-card-icon svg {
+  width: 32px;
+  height: 32px;
+  stroke: white;
+  stroke-width: 2;
+}
+
 .info-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
