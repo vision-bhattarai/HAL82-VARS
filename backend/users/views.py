@@ -19,19 +19,27 @@ class UserRegistrationView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+        
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = serializer.save()
 
-        # Create wallet for new user
-        general_user = user.general_user
-        Wallet.objects.create(user=general_user, balance=0.00)
+            # Create wallet for new user
+            general_user = user.general_user
+            Wallet.objects.create(user=general_user, balance=0.00)
 
-        return Response({
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-            'message': 'User registered successfully'
-        }, status=status.HTTP_201_CREATED)
+            return Response({
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'message': 'User registered successfully'
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({
+                'message': str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserLoginView(generics.GenericAPIView):

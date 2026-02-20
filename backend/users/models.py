@@ -6,7 +6,7 @@ class GeneralUser(models.Model):
     """Extended general user profile"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='general_user')
     phone_number = models.CharField(max_length=20, null=True, blank=True)
-    citizenship_number = models.CharField(max_length=50, unique=True, null=True, blank=True)
+    citizenship_number = models.CharField(max_length=50, null=True, blank=True)
     citizenship_document = models.FileField(upload_to='citizenship_docs/', null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)

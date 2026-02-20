@@ -30,6 +30,27 @@ function Register({ onRegisterSuccess }) {
     e.preventDefault();
     setError('');
 
+    // Front-end validation
+    if (!formData.username.trim()) {
+      setError('Username is required');
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setError('Email is required');
+      return;
+    }
+
+    if (!formData.password) {
+      setError('Password is required');
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
     if (formData.password !== formData.passwordConfirm) {
       setError('Passwords do not match');
       return;
@@ -39,15 +60,16 @@ function Register({ onRegisterSuccess }) {
 
     try {
       const registerData = {
-        username: formData.username,
-        email: formData.email,
+        username: formData.username.trim(),
+        email: formData.email.trim(),
         password: formData.password,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        phone_number: formData.phone_number,
-        citizenship_number: formData.citizenship_number,
+        first_name: formData.first_name.trim(),
+        last_name: formData.last_name.trim(),
+        phone_number: formData.phone_number.trim(),
+        citizenship_number: formData.citizenship_number.trim(),
       };
 
+      console.log('Submitting registration data:', { ...registerData, password: '***' });
       await authService.register(registerData);
       
       // Auto-login after registration
@@ -59,7 +81,35 @@ function Register({ onRegisterSuccess }) {
       onRegisterSuccess(loginResponse.data.user);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.username?.[0] || err.response?.data?.message || 'Registration failed. Please try again.');
+      // Extract error message from various possible response formats
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      if (err.response?.data) {
+        const data = err.response.data;
+        // Check for field-specific errors (DRF format)
+        if (typeof data === 'object') {
+          for (const [key, value] of Object.entries(data)) {
+            if (Array.isArray(value)) {
+              errorMessage = `${key}: ${value[0]}`;
+              break;
+            } else if (typeof value === 'string') {
+              errorMessage = `${key}: ${value}`;
+              break;
+            }
+          }
+        }
+        // Check for message field
+        if (data.message) {
+          errorMessage = data.message;
+        }
+        // Check for detail field
+        if (data.detail) {
+          errorMessage = data.detail;
+        }
+      }
+      
+      console.error('Registration error:', err);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
