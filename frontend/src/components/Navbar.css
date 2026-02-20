@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Sofia+Sans:wght@400;600;700&display=swap');
+
 .navbar {
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -61,10 +63,15 @@
 
 .nav-link {
   color: #333;
-  font-weight: 600;
+  font-weight: 500;
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
 }
 
 .nav-link:hover {
@@ -85,6 +92,14 @@
 }
 
 .nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: #fd7e14;
+}
+
+.nav-link.active::after {
   width: 100%;
 }
 

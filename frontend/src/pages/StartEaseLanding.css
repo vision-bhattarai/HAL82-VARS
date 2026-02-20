@@ -94,6 +94,118 @@ body {
 .startease-nav-actions {
   display: flex;
   gap: 15px;
+  align-items: center;
+}
+
+/* User Dropdown Styling */
+.startease-user-dropdown {
+  position: relative;
+}
+
+.startease-user-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 2px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.startease-user-button:hover {
+  background: rgba(253, 126, 20, 0.05);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.startease-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(253, 126, 20, 0.3);
+}
+
+.startease-user-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.startease-user-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  min-width: 160px;
+  margin-top: 10px;
+  z-index: 1001;
+  overflow: hidden;
+  animation: startease-fadeDown 0.2s ease-out;
+}
+
+@keyframes startease-fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.startease-user-menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-family: 'DM Mono', monospace;
+}
+
+.startease-user-menu-item:first-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.startease-user-menu-item:hover {
+  background: rgba(253, 126, 20, 0.1);
+  color: var(--accent);
+}
+
+.startease-logout-btn {
+  color: var(--accent);
+}
+
+.startease-logout-btn:hover {
+  background: rgba(253, 126, 20, 0.15) !important;
 }
 
 .startease-btn {
@@ -421,6 +533,34 @@ body {
 }
 .startease-btn-details:hover { 
   background: var(--accent); 
+}
+
+/* EXPLORE CTA */
+.startease-explore-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+  animation: startease-fadeUp 0.7s ease 0.5s both;
+}
+
+.startease-btn-explore {
+  font-size: 0.85rem;
+  padding: 16px 48px;
+  animation: startease-pulse 2s ease-in-out infinite;
+}
+
+@keyframes startease-pulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 25px rgba(253, 126, 20, 0.5);
+  }
+}
+
+.startease-btn-explore:hover {
+  animation: none;
+  box-shadow: 0 12px 35px rgba(253, 126, 20, 0.6) !important;
 }
 
 /* SUCCESS STORIES */

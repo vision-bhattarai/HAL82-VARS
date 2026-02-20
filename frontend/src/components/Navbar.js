@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar({ isAuthenticated, user, onLogout }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     await onLogout();
@@ -19,13 +20,13 @@ function Navbar({ isAuthenticated, user, onLogout }) {
         
         <ul className="nav-menu">
           <li className="nav-item">
-            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
           </li>
           <li className="nav-item">
-            <Link to="/dashboard" className="nav-link">Campaigns</Link>
+            <Link to="/dashboard" className={`nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`}>Campaigns</Link>
           </li>
           <li className="nav-item">
-            <Link to="/how-it-works" className="nav-link">How it Works</Link>
+            <Link to="/how-it-works" className={`nav-link ${location.pathname === '/how-it-works' ? 'active' : ''}`}>How it Works</Link>
           </li>
           
           {isAuthenticated ? (

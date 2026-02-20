@@ -1,8 +1,18 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './StartEaseLanding.css';
 
-function StartEaseLanding() {
+function StartEaseLanding({ isAuthenticated, user, onLogout }) {
+  const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleLogout = async () => {
+    if (onLogout) {
+      await onLogout();
+    }
+    setDropdownOpen(false);
+    navigate('/');
+  };
   const statsRef = useRef(null);
 
   useEffect(() => {
@@ -77,12 +87,41 @@ function StartEaseLanding() {
           <li><a href="/">Setting</a></li>
         </ul>
         <div className="startease-nav-actions">
-          <Link to="/login" className="startease-btn startease-btn-ghost">
-            Log in
-          </Link>
-          <Link to="/register" className="startease-btn startease-btn-primary">
-            Get Started
-          </Link>
+          {isAuthenticated && user ? (
+            <div className="startease-user-dropdown">
+              <button 
+                className="startease-user-button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <div className="startease-user-avatar">
+                  {user.user?.username?.charAt(0).toUpperCase() || 'U'}
+                </div>
+                <span className="startease-user-name">{user.user?.username || 'User'}</span>
+              </button>
+              {dropdownOpen && (
+                <div className="startease-user-menu">
+                  <Link to="/dashboard" className="startease-user-menu-item" onClick={() => setDropdownOpen(false)}>
+                    My Campaigns
+                  </Link>
+                  <button 
+                    onClick={handleLogout} 
+                    className="startease-user-menu-item startease-logout-btn"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link to="/login" className="startease-btn startease-btn-ghost">
+                Log in
+              </Link>
+              <Link to="/register" className="startease-btn startease-btn-primary">
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
       </nav>
       {/* HERO */}
@@ -205,6 +244,13 @@ function StartEaseLanding() {
               </span>
             </div>
           </div>
+        </div>
+        
+        {/* Explore Button */}
+        <div className="startease-explore-cta">
+          <Link to="/dashboard" className="startease-btn startease-btn-primary startease-btn-explore">
+            Explore All Campaigns
+          </Link>
         </div>
       </section>
 

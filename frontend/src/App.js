@@ -28,7 +28,7 @@ function AppContent({ isAuthenticated, user, loading, onLogout, onLoginSuccess }
         <Navbar isAuthenticated={isAuthenticated} user={user} onLogout={onLogout} />
       )}
       <Routes>
-        <Route path="/" element={<StartEaseLanding />} />
+        <Route path="/" element={<StartEaseLanding isAuthenticated={isAuthenticated} user={user} onLogout={onLogout} />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login onLoginSuccess={onLoginSuccess} />} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register onRegisterSuccess={onLoginSuccess} />} />
         <Route path="/dashboard" element={isAuthenticated ? <Dashboard user={user} /> : <Navigate to="/login" />} />
