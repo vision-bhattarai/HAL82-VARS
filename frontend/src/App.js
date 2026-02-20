@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { authService } from './services/api';
 import Navbar from './components/Navbar';
-import Landing from './pages/Landing';
+import StartEaseLanding from './pages/StartEaseLanding';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -10,6 +10,34 @@ import CampaignDetail from './pages/CampaignDetail';
 import AddCampaign from './pages/AddCampaign';
 import BecomeStartup from './pages/BecomeStartup';
 import './App.css';
+
+function AppContent({ isAuthenticated, user, loading, onLogout, onLoginSuccess }) {
+  const location = useLocation();
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  // Hide navbar for StartEase landing page
+  const showNavbar = location.pathname !== '/';
+
+  return (
+    <>
+      {showNavbar && (
+        <Navbar isAuthenticated={isAuthenticated} user={user} onLogout={onLogout} />
+      )}
+      <Routes>
+        <Route path="/" element={<StartEaseLanding />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login onLoginSuccess={onLoginSuccess} />} />
+        <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register onRegisterSuccess={onLoginSuccess} />} />
+        <Route path="/dashboard" element={isAuthenticated ? <Dashboard user={user} /> : <Navigate to="/login" />} />
+        <Route path="/campaign/:id" element={<CampaignDetail isAuthenticated={isAuthenticated} />} />
+        <Route path="/create-campaign" element={isAuthenticated ? <AddCampaign /> : <Navigate to="/login" />} />
+        <Route path="/become-startup" element={isAuthenticated ? <BecomeStartup onSuccess={() => window.location.href = '/dashboard'} /> : <Navigate to="/login" />} />
+      </Routes>
+    </>
+  );
+}
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -48,22 +76,15 @@ function App() {
     setIsAuthenticated(true);
   };
 
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
-
   return (
     <Router>
-      <Navbar isAuthenticated={isAuthenticated} user={user} onLogout={handleLogout} />
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login onLoginSuccess={handleLoginSuccess} />} />
-        <Route path="/register" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register onRegisterSuccess={handleLoginSuccess} />} />
-        <Route path="/dashboard" element={isAuthenticated ? <Dashboard user={user} /> : <Navigate to="/login" />} />
-        <Route path="/campaign/:id" element={<CampaignDetail isAuthenticated={isAuthenticated} />} />
-        <Route path="/create-campaign" element={isAuthenticated ? <AddCampaign /> : <Navigate to="/login" />} />
-        <Route path="/become-startup" element={isAuthenticated ? <BecomeStartup onSuccess={() => window.location.href = '/dashboard'} /> : <Navigate to="/login" />} />
-      </Routes>
+      <AppContent 
+        isAuthenticated={isAuthenticated} 
+        user={user} 
+        loading={loading}
+        onLogout={handleLogout}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </Router>
   );
 }
