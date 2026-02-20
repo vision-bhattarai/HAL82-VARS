@@ -84,7 +84,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
           <li><a href="/" className="active">Home</a></li>
           <li><a href="#featured">Startups</a></li>
           <li><Link to="/how-it-works">How it Works</Link></li>
-          <li><a href="/">Setting</a></li>
+          <li>{isAuthenticated ? <Link to="/settings">Settings</Link> : <a href="/">Settings</a>}</li>
         </ul>
         <div className="startease-nav-actions">
           {isAuthenticated && user ? (

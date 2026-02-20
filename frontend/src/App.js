@@ -10,6 +10,7 @@ import CampaignDetail from './pages/CampaignDetail';
 import AddCampaign from './pages/AddCampaign';
 import BecomeStartup from './pages/BecomeStartup';
 import HowItWorks from './pages/HowItWorks';
+import Settings from './pages/Settings';
 import './App.css';
 
 function AppContent({ isAuthenticated, user, loading, onLogout, onLoginSuccess }) {
@@ -35,6 +36,7 @@ function AppContent({ isAuthenticated, user, loading, onLogout, onLoginSuccess }
         <Route path="/campaign/:id" element={<CampaignDetail isAuthenticated={isAuthenticated} />} />
         <Route path="/create-campaign" element={isAuthenticated ? <AddCampaign /> : <Navigate to="/login" />} />
         <Route path="/become-startup" element={isAuthenticated ? <BecomeStartup onSuccess={() => window.location.href = '/dashboard'} /> : <Navigate to="/login" />} />
+        <Route path="/settings" element={isAuthenticated ? <Settings user={user} /> : <Navigate to="/login" />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
       </Routes>
     </>
