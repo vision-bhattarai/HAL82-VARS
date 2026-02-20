@@ -40,7 +40,7 @@ function Login({ onLoginSuccess }) {
     <div className="auth-container page-container">
       <div className="auth-form-wrapper">
         <div className="auth-card">
-          <h1 className="form-title">Login to StartEzz</h1>
+          <h1 className="form-title">Login to Start<span className="ease-orange">Ease</span></h1>
           
           {error && <div className="error-message">{error}</div>}
 

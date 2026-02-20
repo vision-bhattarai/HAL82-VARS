@@ -41,6 +41,11 @@
   text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.ease-orange {
+  color: #fd7e14;
+  text-shadow: 0 2px 4px rgba(253, 126, 20, 0.2);
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
