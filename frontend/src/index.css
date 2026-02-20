@@ -6,8 +6,9 @@
 
 body {
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   color: #333;
+  scroll-behavior: smooth;
 }
 
 html, body, #root {
@@ -18,16 +19,36 @@ html, body, #root {
 a {
   text-decoration: none;
   color: inherit;
+  transition: all 0.3s ease;
 }
 
 button {
   cursor: pointer;
   border: none;
   font-family: inherit;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+button:hover::before {
+  left: 100%;
 }
 
 input, textarea {
   font-family: inherit;
+  transition: all 0.3s ease;
 }
 
 /* Utility Classes */
@@ -49,39 +70,51 @@ input, textarea {
 }
 
 .button-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #fd7e14 0%, #e8590c 100%);
   color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
+  transition: all 0.3s ease;
 }
 
 .button-primary:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #e8590c 0%, #d4480a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(253, 126, 20, 0.4);
 }
 
 .button-secondary {
-  background-color: #6c757d;
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
   color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+  transition: all 0.3s ease;
 }
 
 .button-secondary:hover {
-  background-color: #5a6268;
+  background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
 }
 
 .button-success {
-  background-color: #28a745;
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
   color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  transition: all 0.3s ease;
 }
 
 .button-success:hover {
-  background-color: #218838;
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
 }
 
 .text-center {

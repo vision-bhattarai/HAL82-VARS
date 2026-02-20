@@ -7,14 +7,14 @@
 }
 
 :root {
-  --bg: #f2ede8;
-  --fg: #1a1612;
-  --accent: #c8502a;
-  --accent2: #4a6741;
-  --muted: #9a9089;
-  --card-bg: #faf7f3;
-  --border: rgba(26,22,18,0.1);
-  --shadow: 0 2px 24px rgba(26,22,18,0.08);
+  --bg: #ffffff;
+  --fg: #333333;
+  --accent: #fd7e14;
+  --accent2: #e8590c;
+  --muted: #666666;
+  --card-bg: #f8f9fa;
+  --border: rgba(255,255,255,0.2);
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
 
 html { 
@@ -23,7 +23,7 @@ html {
 
 body {
   font-family: 'DM Mono', monospace;
-  background: var(--bg);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   color: var(--fg);
   overflow-x: hidden;
 }
@@ -36,135 +36,163 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 56px;
-  background: rgba(242,237,232,0.88);
-  backdrop-filter: blur(12px);
+  padding: 20px 56px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(15px);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .startease-logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.4rem;
+  font-family: 'Sofia Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
   letter-spacing: -0.02em;
   color: var(--fg);
   text-decoration: none;
 }
 .startease-logo span { 
-  color: var(--accent); 
+  color: var(--accent);
+  text-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+  font-weight: 400;
 }
 
 .startease-nav-links {
   display: flex;
-  gap: 36px;
+  gap: 40px;
   list-style: none;
 }
 .startease-nav-links a {
   font-family: 'DM Mono', monospace;
-  font-size: 0.78rem;
-  font-weight: 400;
+  font-size: 0.8rem;
+  font-weight: 500;
   letter-spacing: 0.05em;
   color: var(--muted);
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 0.2s;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.startease-nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+  transition: width 0.3s ease;
+}
+.startease-nav-links a:hover::after, .startease-nav-links a.active::after { 
+  width: 100%;
 }
 .startease-nav-links a:hover, .startease-nav-links a.active { 
-  color: var(--fg); 
+  color: var(--fg);
+  transform: translateY(-2px);
 }
 
 .startease-nav-actions {
   display: flex;
-  gap: 10px;
+  gap: 15px;
 }
 
 .startease-btn {
   font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: 0.78rem;
+  font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 10px 22px;
-  border-radius: 4px;
+  padding: 12px 25px;
+  border-radius: 8px;
   cursor: pointer;
   border: none;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 .startease-btn-ghost {
   background: transparent;
   color: var(--fg);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
 }
 .startease-btn-ghost:hover { 
   background: var(--fg); 
-  color: var(--bg); 
+  color: var(--bg);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .startease-btn-primary {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
   color: #fff;
+  box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
 }
 .startease-btn-primary:hover { 
-  background: #a84022; 
+  background: linear-gradient(135deg, var(--accent2) 0%, #d4480a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(253, 126, 20, 0.4);
 }
 
 /* HERO */
 .startease-hero {
-  min-height: 72vh;
+  min-height: 75vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 80px 56px 100px;
+  padding: 100px 56px 120px;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
 }
 
 .startease-hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(200,80,42,0.08) 0%, transparent 70%);
+  background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(220, 53, 69, 0.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
 .startease-hero-tag {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 28px;
+  margin-bottom: 32px;
   opacity: 0;
   animation: startease-fadeUp 0.8s ease 0.1s forwards;
+  font-weight: 600;
 }
 
 .startease-hero h1 {
   font-family: 'Cormorant Garamond', serif;
   font-weight: 300;
-  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-size: clamp(3.8rem, 8vw, 7.5rem);
   line-height: 1.0;
   letter-spacing: -0.02em;
   color: var(--fg);
-  max-width: 800px;
+  max-width: 850px;
   opacity: 0;
   animation: startease-fadeUp 0.9s ease 0.25s forwards;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .startease-hero h1 em {
   font-style: italic;
   color: var(--accent);
+  text-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
 }
 
 .startease-hero-sub {
-  margin-top: 28px;
-  font-size: 0.82rem;
+  margin-top: 32px;
+  font-size: 0.85rem;
   color: var(--muted);
   letter-spacing: 0.03em;
-  max-width: 400px;
+  max-width: 450px;
   line-height: 1.7;
   opacity: 0;
   animation: startease-fadeUp 0.9s ease 0.4s forwards;
@@ -172,8 +200,8 @@ body {
 
 .startease-hero-cta {
   display: flex;
-  gap: 14px;
-  margin-top: 44px;
+  gap: 18px;
+  margin-top: 50px;
   opacity: 0;
   animation: startease-fadeUp 0.9s ease 0.55s forwards;
 }

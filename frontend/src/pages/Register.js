@@ -48,7 +48,7 @@ function Register({ onRegisterSuccess }) {
         citizenship_number: formData.citizenship_number,
       };
 
-      const response = await authService.register(registerData);
+      await authService.register(registerData);
       
       // Auto-login after registration
       const loginResponse = await authService.login({

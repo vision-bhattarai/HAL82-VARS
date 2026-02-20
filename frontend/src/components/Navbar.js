@@ -14,7 +14,7 @@ function Navbar({ isAuthenticated, user, onLogout }) {
     <nav className="navbar">
       <div className="navbar-container container">
         <Link to="/" className="navbar-logo">
-          <span className="logo-icon">🚀</span> StartEzz
+          <strong>Start</strong><span>Ease</span>
         </Link>
         
         <ul className="nav-menu">
