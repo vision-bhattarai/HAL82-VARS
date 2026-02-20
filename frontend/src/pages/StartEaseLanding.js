@@ -73,7 +73,7 @@ function StartEaseLanding() {
         <ul className="startease-nav-links">
           <li><a href="/" className="active">Home</a></li>
           <li><a href="#featured">Startups</a></li>
-          <li><a href="#featured">How it Works</a></li>
+          <li><Link to="/how-it-works">How it Works</Link></li>
           <li><a href="/">Setting</a></li>
         </ul>
         <div className="startease-nav-actions">
@@ -96,9 +96,9 @@ function StartEaseLanding() {
           <Link to="/dashboard" className="startease-btn startease-btn-primary">
             Explore Startups
           </Link>
-          <a href="#featured" className="startease-btn startease-btn-ghost">
+          <Link to="/how-it-works" className="startease-btn startease-btn-ghost">
             How it Works
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -321,7 +321,7 @@ function StartEaseLanding() {
                 <a href="/">Investors</a>
               </li>
               <li>
-                <a href="/">How it Works</a>
+                <Link to="/how-it-works">How it Works</Link>
               </li>
               <li>
                 <a href="/">Pricing</a>

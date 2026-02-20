@@ -14,7 +14,7 @@ function Navbar({ isAuthenticated, user, onLogout }) {
     <nav className="navbar">
       <div className="navbar-container container">
         <Link to="/" className="navbar-logo">
-          <strong>Start</strong><span>Ease</span>
+          Start<span>Ease</span>
         </Link>
         
         <ul className="nav-menu">
@@ -23,6 +23,9 @@ function Navbar({ isAuthenticated, user, onLogout }) {
           </li>
           <li className="nav-item">
             <Link to="/dashboard" className="nav-link">Campaigns</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/how-it-works" className="nav-link">How it Works</Link>
           </li>
           
           {isAuthenticated ? (

@@ -19,13 +19,18 @@
 .navbar-logo {
   font-size: 26px;
   font-weight: bold;
-  color: #fd7e14;
+  color: #333;
   display: flex;
   align-items: center;
   gap: 10px;
   transition: all 0.3s ease;
-  text-shadow: 0 2px 4px rgba(253, 126, 20, 0.2);
   font-family: 'Sofia Sans', sans-serif;
+}
+
+.navbar-logo span {
+  color: #fd7e14;
+  text-shadow: 0 2px 4px rgba(253, 126, 20, 0.2);
+  font-weight: 400;
 }
 
 .navbar-logo strong {
