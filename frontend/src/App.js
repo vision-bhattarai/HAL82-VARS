@@ -64,10 +64,11 @@ function App() {
   const handleLogout = async () => {
     try {
       await authService.logout();
-      setIsAuthenticated(false);
-      setUser(null);
     } catch (error) {
       console.error('Logout failed:', error);
+    } finally {
+      setIsAuthenticated(false);
+      setUser(null);
     }
   };
 
