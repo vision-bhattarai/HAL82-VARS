@@ -6,6 +6,7 @@ function Navbar({ isAuthenticated, user, onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const isStartup = Boolean(user?.startup_profile || user?.startup || user?.is_startup);
 
   const handleLogout = async () => {
     if (onLogout) await onLogout();
@@ -39,13 +40,17 @@ function Navbar({ isAuthenticated, user, onLogout }) {
             </button>
             {dropdownOpen && (
               <div className="startease-user-menu">
-                {user?.startup_profile ? (
+                <Link to="/my-dashboard" className="startease-user-menu-item" onClick={() => setDropdownOpen(false)}>
+                  My Dashboard
+                </Link>
+
+                {isStartup ? (
                   <>
+                    <Link to="/startup-portal" className="startease-user-menu-item" onClick={() => setDropdownOpen(false)}>
+                      Startup Portal
+                    </Link>
                     <Link to="/create-campaign" className="startease-user-menu-item" onClick={() => setDropdownOpen(false)}>
                       Create Campaign
-                    </Link>
-                    <Link to="/my-dashboard" className="startease-user-menu-item" onClick={() => setDropdownOpen(false)}>
-                      My Dashboard
                     </Link>
                   </>
                 ) : (

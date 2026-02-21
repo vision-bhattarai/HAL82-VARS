@@ -10,6 +10,7 @@ import MyDashboard from './pages/MyDashboard';
 import CampaignDetail from './pages/CampaignDetail';
 import AddCampaign from './pages/AddCampaign';
 import BecomeStartup from './pages/BecomeStartup';
+import StartupPortal from './pages/StartupPortal';
 import HowItWorks from './pages/HowItWorks';
 import Settings from './pages/Settings';
 import './App.css';
@@ -23,6 +24,7 @@ function AppContent({ isAuthenticated, user, loading, onLogout, onLoginSuccess }
 
   // Hide navbar for StartEase landing page
   const showNavbar = location.pathname !== '/';
+  const isStartup = Boolean(user?.startup_profile || user?.startup || user?.is_startup);
 
   return (
     <>
@@ -36,8 +38,27 @@ function AppContent({ isAuthenticated, user, loading, onLogout, onLoginSuccess }
         <Route path="/dashboard" element={isAuthenticated ? <Dashboard user={user} /> : <Navigate to="/login" />} />
         <Route path="/my-dashboard" element={isAuthenticated ? <MyDashboard user={user} /> : <Navigate to="/login" />} />
         <Route path="/campaign/:id" element={<CampaignDetail isAuthenticated={isAuthenticated} />} />
-        <Route path="/create-campaign" element={isAuthenticated ? <AddCampaign /> : <Navigate to="/login" />} />
-        <Route path="/become-startup" element={isAuthenticated ? <BecomeStartup onSuccess={() => window.location.href = '/dashboard'} /> : <Navigate to="/login" />} />
+        <Route path="/startup-portal" element={isAuthenticated ? (isStartup ? <StartupPortal user={user} /> : <Navigate to="/become-startup" />) : <Navigate to="/login" />} />
+        <Route path="/create-campaign" element={isAuthenticated ? (isStartup ? <AddCampaign /> : <Navigate to="/become-startup" />) : <Navigate to="/login" />} />
+        <Route
+          path="/become-startup"
+          element={
+            isAuthenticated ? (
+              <BecomeStartup
+                onSuccess={(startupData) => {
+                  onLoginSuccess({
+                    ...(user || {}),
+                    startup_profile: startupData,
+                    is_startup: true,
+                  });
+                  window.location.href = '/startup-portal';
+                }}
+              />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
         <Route path="/settings" element={isAuthenticated ? <Settings user={user} /> : <Navigate to="/login" />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
       </Routes>

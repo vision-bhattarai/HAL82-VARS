@@ -34,10 +34,22 @@ function BecomeStartup({ onSuccess }) {
     setLoading(true);
 
     try {
-      await userService.becomeStartup(formData);
-      onSuccess();
+      const response = await userService.becomeStartup(formData);
+      onSuccess(response.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to register as startup');
+      const responseData = err.response?.data;
+
+      if (responseData?.message) {
+        setError(responseData.message);
+      } else if (responseData?.website?.[0]) {
+        setError(responseData.website[0]);
+      } else if (responseData?.company_name?.[0]) {
+        setError(responseData.company_name[0]);
+      } else if (Array.isArray(responseData?.non_field_errors) && responseData.non_field_errors.length > 0) {
+        setError(responseData.non_field_errors[0]);
+      } else {
+        setError('Failed to register as startup');
+      }
     } finally {
       setLoading(false);
     }

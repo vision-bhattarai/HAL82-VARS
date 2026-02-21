@@ -12,11 +12,30 @@ class UserSerializer(serializers.ModelSerializer):
 
 class GeneralUserSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    startup_profile = serializers.SerializerMethodField()
+    is_startup = serializers.SerializerMethodField()
 
     class Meta:
         model = GeneralUser
         fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at', 'total_donated']
+
+    def get_startup_profile(self, obj):
+        startup = getattr(obj, 'startup_profile', None)
+        if not startup:
+            return None
+
+        return {
+            'id': startup.id,
+            'company_name': startup.company_name,
+            'category': startup.category,
+            'description': startup.description,
+            'website': startup.website,
+            'is_verified': startup.is_verified,
+        }
+
+    def get_is_startup(self, obj):
+        return hasattr(obj, 'startup_profile')
 
 
 class StartupSerializer(serializers.ModelSerializer):
@@ -102,7 +121,12 @@ class StartupRegistrationSerializer(serializers.Serializer):
     company_name = serializers.CharField(max_length=255)
     category = serializers.ChoiceField(choices=Startup._meta.get_field('category').choices)
     description = serializers.CharField()
-    website = serializers.URLField(required=False)
+    website = serializers.URLField(required=False, allow_blank=True, allow_null=True)
+
+    def validate_company_name(self, value):
+        if Startup.objects.filter(company_name__iexact=value).exists():
+            raise serializers.ValidationError("A startup with this company name already exists")
+        return value
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -114,13 +138,16 @@ class StartupRegistrationSerializer(serializers.Serializer):
         except GeneralUser.DoesNotExist:
             raise serializers.ValidationError("User must have a general user profile first")
 
+        if Startup.objects.filter(user=request.user).exists():
+            raise serializers.ValidationError("You are already registered as a startup")
+
         startup = Startup.objects.create(
             user=request.user,
             general_user=general_user,
             company_name=validated_data['company_name'],
             category=validated_data['category'],
             description=validated_data['description'],
-            website=validated_data.get('website', ''),
+            website=validated_data.get('website') or None,
             total_requested=0
         )
 

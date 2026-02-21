@@ -22,9 +22,6 @@ const getCsrfToken = () => {
 const apiClient = axios.create({
   baseURL: API_URL,
   withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Add request interceptor to include CSRF token

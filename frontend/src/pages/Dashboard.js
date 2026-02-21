@@ -8,6 +8,7 @@ function Dashboard({ user }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all');
+  const isStartup = Boolean(user?.startup_profile || user?.startup || user?.is_startup);
 
   useEffect(() => {
     fetchCampaigns();
@@ -42,9 +43,9 @@ function Dashboard({ user }) {
           <p>Support innovative startups and get early access to amazing products</p>
         </div>
 
-        {user?.startup && (
+        {isStartup && (
           <div className="startup-banner">
-            <h3>Welcome back, {user.startup.company_name}!</h3>
+            <h3>Welcome back, {user?.startup_profile?.company_name || user?.startup?.company_name || 'Startup'}!</h3>
             <Link to="/create-campaign" className="button-primary">+ Create New Campaign</Link>
           </div>
         )}

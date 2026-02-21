@@ -51,9 +51,24 @@ function AddCampaign() {
       if (formData.image) campaignFormData.append('image', formData.image);
 
       await campaignService.createCampaign(campaignFormData);
-      navigate('/dashboard');
+      navigate('/startup-portal');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create campaign');
+      const responseData = err.response?.data;
+      if (responseData?.message) {
+        setError(responseData.message);
+      } else if (responseData?.error) {
+        setError(responseData.error);
+      } else if (typeof responseData === 'object' && responseData !== null) {
+        const firstKey = Object.keys(responseData)[0];
+        const firstValue = firstKey ? responseData[firstKey] : null;
+        if (Array.isArray(firstValue) && firstValue.length > 0) {
+          setError(firstValue[0]);
+        } else {
+          setError('Failed to create campaign');
+        }
+      } else {
+        setError('Failed to create campaign');
+      }
     } finally {
       setLoading(false);
     }
