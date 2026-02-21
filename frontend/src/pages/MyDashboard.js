@@ -3,6 +3,59 @@ import { campaignService, walletService, userService } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import './MyDashboard.css';
 
+const DUMMY_MY_CAMPAIGNS = [
+  {
+    id: 'dummy-dashboard-1',
+    product_name: 'MediBridge Home Monitor',
+    current_amount: 27500,
+    goal_amount: 50000,
+    view_count: 880,
+    isDummy: true,
+  },
+  {
+    id: 'dummy-dashboard-2',
+    product_name: 'GreenCart Farmer Network',
+    current_amount: 19000,
+    goal_amount: 40000,
+    view_count: 640,
+    isDummy: true,
+  },
+  {
+    id: 'dummy-dashboard-3',
+    product_name: 'LearnLoop Pro',
+    current_amount: 33200,
+    goal_amount: 45000,
+    view_count: 1210,
+    isDummy: true,
+  },
+];
+
+const toWavySeries = (values = []) => {
+  const cleanValues = values
+    .map((value) => Number(value) || 0)
+    .filter((value) => value >= 0);
+
+  if (cleanValues.length === 0) {
+    return [0, 14, 4, 18, 7, 21, 9, 24];
+  }
+
+  const anchors = cleanValues.length === 1
+    ? [cleanValues[0], cleanValues[0] * 1.18, cleanValues[0] * 0.92, cleanValues[0] * 1.24]
+    : cleanValues;
+
+  const multipliers = [0.86, 1.15, 0.91, 1.12, 0.89, 1.18];
+  const series = [];
+
+  anchors.forEach((value, index) => {
+    const first = Math.round(value * multipliers[index % multipliers.length]);
+    const second = Math.round(value * multipliers[(index + 1) % multipliers.length]);
+    series.push(Math.max(0, first));
+    series.push(Math.max(0, second));
+  });
+
+  return series.slice(0, 10);
+};
+
 function LineChart({ points = [], width = 600, height = 200 }) {
   if (!points || points.length === 0) return <div className="chart-empty">No data</div>;
   const max = Math.max(...points);
@@ -47,10 +100,17 @@ function MyDashboard({ user }) {
           ]);
 
           // Build simple time-series from donations or views if present
-          const campaigns = myCampaignsRes.data || [];
-          // Aggregate donations and views per campaign (mock time series)
-          const donations = campaigns.map(c => c.current_amount || 0);
-          const views = campaigns.map(c => c.view_count || 0);
+          const liveCampaigns = (myCampaignsRes.data || []).filter((campaign) => {
+            const productName = String(campaign?.product_name || '').toLowerCase();
+            return !productName.includes('ronish') && !productName.includes('dud');
+          });
+
+          const needed = 3 - liveCampaigns.length;
+          const fallbackCampaigns = needed > 0 ? DUMMY_MY_CAMPAIGNS.slice(0, needed) : [];
+          const campaigns = [...liveCampaigns, ...fallbackCampaigns];
+
+          const donations = toWavySeries(campaigns.map(c => c.current_amount || 0));
+          const views = toWavySeries(campaigns.map(c => c.view_count || 0));
 
           setData({
             type: 'startup',

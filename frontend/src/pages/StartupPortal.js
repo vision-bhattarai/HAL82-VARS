@@ -3,6 +3,36 @@ import { Link } from 'react-router-dom';
 import { campaignService } from '../services/api';
 import './StartupPortal.css';
 
+const DUMMY_MY_CAMPAIGNS = [
+  {
+    id: 'dummy-my-1',
+    product_name: 'MediBridge Home Monitor',
+    product_type: 'physical',
+    current_amount: 27500,
+    goal_amount: 50000,
+    status: 'active',
+    isDummy: true,
+  },
+  {
+    id: 'dummy-my-2',
+    product_name: 'GreenCart Farmer Network',
+    product_type: 'service',
+    current_amount: 19000,
+    goal_amount: 40000,
+    status: 'active',
+    isDummy: true,
+  },
+  {
+    id: 'dummy-my-3',
+    product_name: 'LearnLoop Pro',
+    product_type: 'digital',
+    current_amount: 33200,
+    goal_amount: 45000,
+    status: 'active',
+    isDummy: true,
+  },
+];
+
 function StartupPortal({ user }) {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,9 +44,17 @@ function StartupPortal({ user }) {
       setError('');
       try {
         const response = await campaignService.getMyCampaigns();
-        setCampaigns(response.data || []);
+        const liveCampaigns = (response.data || []).filter((campaign) => {
+          const productName = String(campaign?.product_name || '').toLowerCase();
+          return !productName.includes('ronish') && !productName.includes('dud');
+        });
+
+        const needed = 3 - liveCampaigns.length;
+        const fallbackCampaigns = needed > 0 ? DUMMY_MY_CAMPAIGNS.slice(0, needed) : [];
+        setCampaigns([...liveCampaigns, ...fallbackCampaigns]);
       } catch (err) {
         setError('Failed to load your campaigns.');
+        setCampaigns(DUMMY_MY_CAMPAIGNS);
       } finally {
         setLoading(false);
       }
@@ -55,7 +93,7 @@ function StartupPortal({ user }) {
           ) : campaigns.length > 0 ? (
             <div className="startup-campaign-grid">
               {campaigns.map((campaign) => (
-                <Link to={`/campaign/${campaign.id}`} key={campaign.id} className="startup-campaign-card">
+                <Link to={campaign.isDummy ? '/dashboard' : `/campaign/${campaign.id}`} key={campaign.id} className="startup-campaign-card">
                   <div className="startup-campaign-title">{campaign.product_name}</div>
                   <div className="startup-campaign-meta">{campaign.product_type}</div>
                   <div className="startup-campaign-funding">

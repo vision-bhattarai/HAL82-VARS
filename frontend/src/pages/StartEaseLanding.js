@@ -3,6 +3,39 @@ import { Link, useNavigate } from 'react-router-dom';
 import { campaignService } from '../services/api';
 import './StartEaseLanding.css';
 
+const DUMMY_FEATURED_CAMPAIGNS = [
+  {
+    id: 'dummy-1',
+    product_name: 'SolarNest Home Kit',
+    product_type: 'physical',
+    description: 'A modular rooftop solar starter kit built for apartments and small homes.',
+    progress_percentage: 72,
+    current_amount: 36000,
+    goal_amount: 50000,
+    isDummy: true,
+  },
+  {
+    id: 'dummy-2',
+    product_name: 'SkillSprint Learning App',
+    product_type: 'digital',
+    description: 'AI-guided micro-courses helping students and professionals upskill faster.',
+    progress_percentage: 48,
+    current_amount: 24000,
+    goal_amount: 50000,
+    isDummy: true,
+  },
+  {
+    id: 'dummy-3',
+    product_name: 'CareLink Telehealth Desk',
+    product_type: 'service',
+    description: 'A virtual first-aid and doctor consultation desk for rural communities.',
+    progress_percentage: 83,
+    current_amount: 41500,
+    goal_amount: 50000,
+    isDummy: true,
+  },
+];
+
 function StartEaseLanding({ isAuthenticated, user, onLogout }) {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -24,10 +57,20 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
       try {
         const res = await campaignService.getAllCampaigns({ status: 'active' });
         const data = res.data.results || res.data;
-        setCampaigns((data || []).slice(0, 3));
+
+        const filteredCampaigns = (data || []).filter((campaign) => {
+          const name = String(campaign?.product_name || '').toLowerCase();
+          return !name.includes('ronish') && !name.includes('dud');
+        });
+
+        const selectedCampaigns = filteredCampaigns.slice(0, 3);
+        const needed = 3 - selectedCampaigns.length;
+        const fallbackCampaigns = needed > 0 ? DUMMY_FEATURED_CAMPAIGNS.slice(0, needed) : [];
+
+        setCampaigns([...selectedCampaigns, ...fallbackCampaigns]);
       } catch (err) {
         console.error('Error fetching featured campaigns:', err);
-        setCampaigns([]);
+        setCampaigns(DUMMY_FEATURED_CAMPAIGNS);
       } finally {
         setCampaignsLoading(false);
       }
@@ -189,7 +232,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
         ) : (
           <div className="startease-campaign-grid">
             {campaigns.map((c, idx) => (
-              <Link to={`/campaign/${c.id}`} key={c.id} className="startease-campaign-card">
+              <Link to={c.isDummy ? '/dashboard' : `/campaign/${c.id}`} key={c.id} className="startease-campaign-card">
                 <span className="startease-card-tag">{c.product_type}</span>
                 <div className="startease-card-title">{c.product_name}</div>
                 <div className="startease-card-desc">{c.description.substring(0, 120)}</div>
@@ -229,48 +272,48 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
         <div className="startease-stories-grid">
           {/* Story 1 */}
           <div className="startease-story-card">
-            <img className="startease-story-image" src="/success-stories/doctor-success.jpg" alt="Safal success story" />
+            <img className="startease-story-image" src="/success-stories/pasted-orange.svg" alt="Safal success story" />
             <div className="startease-story-overlay">
               <span style={{ color: '#fff', fontSize: '0.8rem', fontFamily: "'DM Mono',monospace" }}>
-                Read Story →
+                Read story
               </span>
             </div>
             <div className="startease-story-body">
               <div className="startease-story-meta">Safal · Comic Books</div>
               <div className="startease-story-title">
-                How Safal funded his startup of a comic book business.
+                
               </div>
             </div>
           </div>
 
           {/* Story 2 */}
           <div className="startease-story-card">
-            <img className="startease-story-image" src="/success-stories/story-2.jpg" alt="Riya success story" />
+            <img className="startease-story-image" src="/success-stories/pasted-orange.svg" alt="Riya success story" />
             <div className="startease-story-overlay">
               <span style={{ color: '#fff', fontSize: '0.8rem', fontFamily: "'DM Mono',monospace" }}>
-                Read Story →
+                Read story
               </span>
             </div>
             <div className="startease-story-body">
               <div className="startease-story-meta">Riya · Renewable Tech</div>
               <div className="startease-story-title">
-                From garage prototype to $2M in funding in under a year.
+                
               </div>
             </div>
           </div>
 
           {/* Story 3 */}
           <div className="startease-story-card">
-            <img className="startease-story-image" src="/success-stories/story-3.jpg" alt="Arjun success story" />
+            <img className="startease-story-image" src="/success-stories/pasted-orange.svg" alt="Arjun success story" />
             <div className="startease-story-overlay">
               <span style={{ color: '#fff', fontSize: '0.8rem', fontFamily: "'DM Mono',monospace" }}>
-                Read Story →
+                Read story
               </span>
             </div>
             <div className="startease-story-body">
               <div className="startease-story-meta">Arjun · EdTech</div>
               <div className="startease-story-title">
-                Building a learning platform that reached 50K students.
+               
               </div>
             </div>
           </div>
@@ -279,7 +322,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
 
       {/* QUOTE */}
       <section className="startease-quote-section">
-        <p className="startease-quote-text">"Giving up is never an option."</p>
+        <p className="startease-quote-text">"Giving up is not in the blood sir."</p>
       </section>
 
       {/* FOOTER */}

@@ -3,6 +3,45 @@ import { Link } from 'react-router-dom';
 import { campaignService } from '../services/api';
 import './Dashboard.css';
 
+const DUMMY_PUBLIC_CAMPAIGNS = [
+  {
+    id: 'dummy-public-1',
+    product_name: 'SolarNest Home Kit',
+    product_type: 'physical',
+    description: 'A modular rooftop solar starter kit built for apartments and small homes.',
+    current_amount: 36000,
+    goal_amount: 50000,
+    backer_count: 142,
+    progress_percentage: 72,
+    startup_name: 'SolarNest Labs',
+    isDummy: true,
+  },
+  {
+    id: 'dummy-public-2',
+    product_name: 'SkillSprint Learning App',
+    product_type: 'digital',
+    description: 'AI-guided micro-courses helping students and professionals upskill faster.',
+    current_amount: 24000,
+    goal_amount: 50000,
+    backer_count: 97,
+    progress_percentage: 48,
+    startup_name: 'SkillSprint',
+    isDummy: true,
+  },
+  {
+    id: 'dummy-public-3',
+    product_name: 'CareLink Telehealth Desk',
+    product_type: 'service',
+    description: 'A virtual first-aid and doctor consultation desk for rural communities.',
+    current_amount: 41500,
+    goal_amount: 50000,
+    backer_count: 206,
+    progress_percentage: 83,
+    startup_name: 'CareLink Health',
+    isDummy: true,
+  },
+];
+
 function Dashboard({ user }) {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,10 +65,22 @@ function Dashboard({ user }) {
       } else {
         response = await campaignService.getAllCampaigns({ status: 'active' });
       }
-      setCampaigns(response.data.results || response.data);
+
+      const fetchedCampaigns = response.data.results || response.data || [];
+      const filteredCampaigns = fetchedCampaigns.filter((campaign) => {
+        const name = String(campaign?.product_name || '').toLowerCase();
+        return !name.includes('ronish') && !name.includes('dud');
+      });
+
+      const fallbackCampaigns = DUMMY_PUBLIC_CAMPAIGNS.filter(
+        (dummyCampaign) => !filteredCampaigns.some((campaign) => campaign.product_name === dummyCampaign.product_name)
+      );
+
+      setCampaigns([...filteredCampaigns, ...fallbackCampaigns].slice(0, 12));
     } catch (err) {
       setError('Failed to load campaigns. Please try again later.');
       console.error('Error fetching campaigns:', err);
+      setCampaigns(DUMMY_PUBLIC_CAMPAIGNS);
     } finally {
       setLoading(false);
     }
@@ -95,7 +146,7 @@ function CampaignCard({ campaign }) {
   const progressPercentage = campaign.progress_percentage || 0;
 
   return (
-    <Link to={`/campaign/${campaign.id}`} className="campaign-card card">
+    <Link to={campaign.isDummy ? '/dashboard' : `/campaign/${campaign.id}`} className="campaign-card card">
       <div className="campaign-image">
         {campaign.image ? (
           <img src={campaign.image} alt={campaign.product_name} />
