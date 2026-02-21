@@ -592,14 +592,15 @@ body {
   animation-delay: 0.4s; 
 }
 
-.startease-story-img-placeholder {
+.startease-story-image {
   width: 100%;
   aspect-ratio: 3/4;
-  background: linear-gradient(135deg, #d4cdc7 0%, #b8b0a8 100%);
+  object-fit: cover;
+  display: block;
   transition: transform 0.5s ease;
 }
 
-.startease-story-card:hover .startease-story-img-placeholder { 
+.startease-story-card:hover .startease-story-image { 
   transform: scale(1.03); 
 }
 

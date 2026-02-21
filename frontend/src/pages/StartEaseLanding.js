@@ -229,12 +229,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
         <div className="startease-stories-grid">
           {/* Story 1 */}
           <div className="startease-story-card">
-            <div
-              className="startease-story-img-placeholder"
-              style={{
-                background: 'linear-gradient(135deg, #b8a898 0%, #8a7d6e 100%)',
-              }}
-            />
+            <img className="startease-story-image" src="/success-stories/doctor-success.jpg" alt="Safal success story" />
             <div className="startease-story-overlay">
               <span style={{ color: '#fff', fontSize: '0.8rem', fontFamily: "'DM Mono',monospace" }}>
                 Read Story →
@@ -250,12 +245,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
 
           {/* Story 2 */}
           <div className="startease-story-card">
-            <div
-              className="startease-story-img-placeholder"
-              style={{
-                background: 'linear-gradient(135deg, #9aaa94 0%, #6d7f68 100%)',
-              }}
-            />
+            <img className="startease-story-image" src="/success-stories/story-2.jpg" alt="Riya success story" />
             <div className="startease-story-overlay">
               <span style={{ color: '#fff', fontSize: '0.8rem', fontFamily: "'DM Mono',monospace" }}>
                 Read Story →
@@ -271,12 +261,7 @@ function StartEaseLanding({ isAuthenticated, user, onLogout }) {
 
           {/* Story 3 */}
           <div className="startease-story-card">
-            <div
-              className="startease-story-img-placeholder"
-              style={{
-                background: 'linear-gradient(135deg, #a89c88 0%, #7a6f5e 100%)',
-              }}
-            />
+            <img className="startease-story-image" src="/success-stories/story-3.jpg" alt="Arjun success story" />
             <div className="startease-story-overlay">
               <span style={{ color: '#fff', fontSize: '0.8rem', fontFamily: "'DM Mono',monospace" }}>
                 Read Story →
